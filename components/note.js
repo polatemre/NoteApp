@@ -19,7 +19,7 @@ export default class Note extends React.Component {
     }
 }
 
-//Main.js
+
 const styles = StyleSheet.create({
     note: {
         position: 'relative',

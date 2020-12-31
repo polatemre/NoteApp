@@ -8,7 +8,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import * as FirebaseCore from 'expo-firebase-core';
-import Note from './note';
+import Note from '../components/note';
 
 export default class Main extends React.Component {
     constructor(props) {
