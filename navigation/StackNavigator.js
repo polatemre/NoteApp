@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home";
 import About from "../screens/About";
 import Contact from "../screens/Contact";
+import Main from "../screens/main";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const MainStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="Main" component={Main} />
     </Stack.Navigator>
   );
 }

@@ -33,8 +33,14 @@ export default class Main extends React.Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>ToDo</Text>
+                <View
+                    style={{
+                    padding: 15,
+                    alignItems: 'center',
+                    borderBottomWidth: 1,
+                    borderColor: 'lightgray'
+                }}>
+                    <Text style={styles.headerText}>Notlarım</Text>
                 </View>
 
                 <ScrollView style={styles.scrollContainer}>
@@ -93,17 +99,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    header: {
-        backgroundColor: '#3933FF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomWidth: 10,
-        borderBottomColor: '#ddd'
-    },
     headerText: {
-        color: 'white',
-        fontSize: 18,
-        padding: 26
+        color: 'black',
+        fontSize: 12,
+        fontWeight: 'bold'
     },
     scrollContainer: {
         flex: 1,
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         color: '#fff',
         padding: 20,
-        backgroundColor: '#252525',
+        backgroundColor: 'gray',
         borderTopWidth: 2,
         borderTopColor: '#ededed'
     },
@@ -139,6 +138,6 @@ const styles = StyleSheet.create({
     },
     addButtonText: {
         color: '#fff',
-        fontSize: 24
+        fontSize: 12
     }
 });
