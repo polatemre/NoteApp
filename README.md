@@ -1,7 +1,7 @@
-# ToDoApp
+# NoteApp
 init project
 
-Yapılacaklar listesi uygulaması hazırlanacaktır.
+Not tutma uygulaması hazırlanacaktır.
 Stack Navigation
 Tab Navigation
 Drawer Navigation
