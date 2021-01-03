@@ -36,6 +36,7 @@ export default class Home extends Component {
                         .firestore()
                         .collection("Users")
                         .doc(data.user.uid)
+                        .set({note: "", date: ""})
                         .then((ref) => {});
                     this
                         .props
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     inputText: {
+        height: 60,
         marginTop: 10,
         padding: 15,
         fontSize: 12,

@@ -9,6 +9,9 @@ import {
 } from 'react-native';
 import * as FirebaseCore from 'expo-firebase-core';
 import Note from '../components/note';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 import firebase from '../Firebase';
 
 // import Notifications from 'expo' import Constants from 'expo-constants';
@@ -49,10 +52,7 @@ export default class Main extends React.Component {
         } else {
             alert('Must use physical device for Push Notifications ');
         }
-        firebase
-            .firestore()
-            .collection(`Users/${userId}`)
-            .add({push_token: token});
+        
         if (Platform.OS === 'android') {
             Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
@@ -93,7 +93,7 @@ export default class Main extends React.Component {
 
     }*/
 
-    componentDidMount() {
+    async componentDidMount() {
         await this.registerForPushNotificationsAsync();
 
         /*this.getLists(noteArray => {
