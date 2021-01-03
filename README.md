@@ -1,4 +1,4 @@
-# ToDoApp
+# NoteApp
 init project
 
 Not tutma uygulaması hazırlanacaktır.
