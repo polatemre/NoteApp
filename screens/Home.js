@@ -36,7 +36,6 @@ export default class Home extends Component {
                         .firestore()
                         .collection("Users")
                         .doc(data.user.uid)
-                        .set({note: "", date: ""})
                         .then((ref) => {});
                     this
                         .props

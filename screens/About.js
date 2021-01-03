@@ -6,7 +6,7 @@ import { View, StyleSheet, Text } from "react-native";
 const About = () => {
   return (
     <View style={styles.center}>
-      <Text>This is the about screen</Text>
+      <Text>Emre Polat - G191210310</Text>
     </View>
   );
 };

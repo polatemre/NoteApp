@@ -9,14 +9,146 @@ import {
 } from 'react-native';
 import * as FirebaseCore from 'expo-firebase-core';
 import Note from '../components/note';
+import firebase from '../Firebase';
+
+// import Notifications from 'expo' import Constants from 'expo-constants';
+// import * as Permissions from 'expo-permissions';
+
+import {useCallback} from 'react';
 
 export default class Main extends React.Component {
     constructor(props) {
         super(props);
+        // this.getUser(); this.subscriber = firebase     .firestore()
+        // .collection("Users")     .doc('emre')     .onSnapshot(doc => {
+        // this.setState({             noteText: doc                 .data()     .note
+        // })     })
+
         this.state = {
             noteArray: [],
             noteText: ''
         }
+    }
+
+    registerForPushNotificationsAsync = async() => {
+        if (Constants.isDevice) {
+            const {status: existingStatus} = await
+            Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            const token = (await Notifications.getExpoPushTokenAsync()).data;
+            console.log(token);
+            this.setState({expoPushToken: token});
+        } else {
+            alert('Must use physical device for Push Notifications ');
+        }
+        firebase
+            .firestore()
+            .collection(`Users/${userId}`)
+            .add({push_token: token});
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [
+                    0, 250, 250, 250
+                ],
+                lightColor: '#FF231F7C'
+            });
+        }
+    };
+
+    /* getUser = async() => {
+        const userDocument = await firebase
+            .firestore()
+            .collection("Users")
+            .doc('emre')
+            .get()
+        console.log(userDocument);
+    }*/
+
+    /* getLists(callback) {
+        let ref = firebase
+            .firestore()
+            .collection('Users')
+            .doc(firebase.auth().currentUser.uid);
+        let unsubscribe = ref.onSnapshot(snapshot => {
+            let noteArray = []
+
+            snapshot.forEach(doc => {
+                noteArray.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+                callback(noteArray);
+            });
+        })
+
+    }*/
+
+    componentDidMount() {
+        await this.registerForPushNotificationsAsync();
+
+        /*this.getLists(noteArray => {
+            this.setState({
+                noteArray,
+                user
+            }, () => {
+                this.setState({loading: false});
+
+            });
+        });*/
+
+        /* try {
+            const user = firebase
+                .auth()
+                .currentUser;
+
+            firebase
+                .firestore()
+                .collection("Users")
+                .doc(firebase.auth().currentUser.uid)
+                .get()
+                .then(querySnapshot => {
+                    this.setState({
+                        noteText: querySnapshot
+                            .data()
+                            .getNote()
+                    })
+                });
+
+            firebase
+                .firestore()
+                .collection('Users')
+                .get()
+                .then(snapshot => {
+                    snapshot.forEach(doc => {
+                        if (doc && doc.exists) {
+                            this.setState({
+
+                                data: [
+                                    ...this.state.data, {
+                                        noteText: doc
+                                            .data()
+                                            .getNote()
+                                    }
+                                ]
+
+                            })
+
+                        }
+                    });
+                });
+        } catch (error) {
+            console.log(error);
+        }*/
     }
 
     render() {
@@ -30,9 +162,9 @@ export default class Main extends React.Component {
                     val={val}
                     deleteMethod={() => this.deleteNote(key)}/>
             })
-
         return (
             <View style={styles.container}>
+
                 <View
                     style={{
                     padding: 15,
@@ -41,6 +173,10 @@ export default class Main extends React.Component {
                     borderColor: 'lightgray'
                 }}>
                     <Text style={styles.headerText}>Notlarım</Text>
+                    <Text>User: {firebase
+                            .auth()
+                            .currentUser
+                            .uid}</Text>
                 </View>
 
                 <ScrollView style={styles.scrollContainer}>
@@ -56,6 +192,7 @@ export default class Main extends React.Component {
                         placeholderTextColor='white'
                         underlineColorAndroid='transparent'></TextInput>
                 </View>
+
                 <TouchableOpacity
                     onPress={this
                     .addTask
@@ -71,6 +208,10 @@ export default class Main extends React.Component {
     addTask() {
         if (this.state.noteText) {
             var date = new Date();
+            let userId = firebase
+                .auth()
+                .currentUser
+                .uid;
 
             this
                 .state
@@ -80,16 +221,29 @@ export default class Main extends React.Component {
                     'note': this.state.noteText
                 });
 
+            firebase
+                .firestore()
+                .collection(`Users/${userId}/notes`)
+                .add({
+                    note: this.state.noteText,
+                    date: date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+                })
+
             this.setState({noteArray: this.state.noteArray});
             this.setState({noteText: this.state.noteText});
         }
     };
+
+    getNote = () => {
+        console.log(this.state.note);
+    }
 
     deleteNote(key) {
         this
             .state
             .noteArray
             .splice(key, 1);
+
         this.setState({noteArray: this.state.noteArray});
     }
 
